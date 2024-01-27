@@ -3,28 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Screen Share Receiver</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.1/socket.io.js"></script>
 </head>
 <body>
+    <h1>Screen Sharing</h1>
+    <div id="screen-container"></div>
 
-<button id="shareScreenBtn">Share Screen</button>
-<img id="screen" alt="Screen Share">
+    <script>
+        const socket = new WebSocket('wss://echo.websocket.org');
 
-<script type="text/javascript">
-    var socket = io.connect('https://jenguu.github.io');  // Replace with your server domain or IP address
+        socket.onopen = () => {
+            console.log('WebSocket connection opened');
+        };
 
-    var screenImage = document.getElementById('screen');
-    var shareScreenBtn = document.getElementById('shareScreenBtn');
+        socket.onmessage = (event) => {
+            const imageBlob = new Blob([event.data], { type: 'image/png' });
+            const imageUrl = URL.createObjectURL(imageBlob);
 
-    shareScreenBtn.addEventListener('click', function() {
-        socket.emit('start_screen_share');
-    });
+            const img = document.createElement('img');
+            img.src = imageUrl;
 
-    socket.on('update_screen', function(data){
-        screenImage.src = 'data:image/jpeg;base64,' + data.image;
-    });
-</script>
+            const screenContainer = document.getElementById('screen-container');
+            screenContainer.innerHTML = '';
+            screenContainer.appendChild(img);
+        };
 
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+        };
+    </script>
 </body>
 </html>
