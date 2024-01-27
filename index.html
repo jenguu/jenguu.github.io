@@ -9,18 +9,19 @@
     <div id="screen-container"></div>
 
     <script>
-        const socket = new WebSocket('wss://echo.websocket.org');
+        const socket = new WebSocket('ws://127.0.0.1:5678');
 
         socket.onopen = () => {
             console.log('WebSocket connection opened');
         };
 
         socket.onmessage = (event) => {
-            const imageBlob = new Blob([event.data], { type: 'image/png' });
-            const imageUrl = URL.createObjectURL(imageBlob);
+            const imageBase64 = btoa(String.fromCharCode.apply(null, new Uint8Array(event.data)));
+            console.log('Received image data:', imageBase64);
 
+            // Display the image directly
             const img = document.createElement('img');
-            img.src = imageUrl;
+            img.src = 'data:image/png;base64,' + imageBase64;
 
             const screenContainer = document.getElementById('screen-container');
             screenContainer.innerHTML = '';
