@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Screen Share</title>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.1/socket.io.js"></script>
+    <title>Screen Share Receiver</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.1/socket.io.js"></script>
 </head>
 <body>
-    <img id="screen" alt="Screen Share">
-    <script type="text/javascript">
-        var socket = io.connect('https://your-server-domain:5000');  // Replace with your server domain
 
-        socket.on('update_screen', function(data){
-            var img = document.getElementById('screen');
-            img.src = 'data:image/jpeg;base64,' + data.image;
-        });
-    </script>
+<button id="shareScreenBtn">Share Screen</button>
+<img id="screen" alt="Screen Share">
+
+<script type="text/javascript">
+    var socket = io.connect('https://jenguu.github.io');  // Replace with your server domain or IP address
+
+    var screenImage = document.getElementById('screen');
+    var shareScreenBtn = document.getElementById('shareScreenBtn');
+
+    shareScreenBtn.addEventListener('click', function() {
+        socket.emit('start_screen_share');
+    });
+
+    socket.on('update_screen', function(data){
+        screenImage.src = 'data:image/jpeg;base64,' + data.image;
+    });
+</script>
+
 </body>
 </html>
