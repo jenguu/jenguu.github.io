@@ -16,13 +16,11 @@
         };
 
         socket.onmessage = (event) => {
-            const arrayBuffer = event.data;
-            const blob = new Blob([arrayBuffer], { type: 'image/png' });
-            const imageUrl = URL.createObjectURL(blob);
+            const base64Image = event.data;
 
-            // Display the image directly
+            // Display the base64-encoded PNG image directly
             const img = document.createElement('img');
-            img.src = imageUrl;
+            img.src = 'data:image/png;base64,' + base64Image;
 
             const screenContainer = document.getElementById('screen-container');
             screenContainer.innerHTML = '';
