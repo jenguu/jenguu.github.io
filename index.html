@@ -9,7 +9,7 @@
 <body>
     <img id="screen" alt="Screen Share">
     <script type="text/javascript">
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        var socket = io.connect('https://your-server-domain:5000');  // Replace with your server domain
 
         socket.on('update_screen', function(data){
             var img = document.getElementById('screen');
@@ -17,4 +17,4 @@
         });
     </script>
 </body>
-</html
+</html>
