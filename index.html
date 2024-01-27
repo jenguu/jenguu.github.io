@@ -16,12 +16,13 @@
         };
 
         socket.onmessage = (event) => {
-            const imageBase64 = btoa(String.fromCharCode.apply(null, new Uint8Array(event.data)));
-            console.log('Received image data:', imageBase64);
+            const arrayBuffer = event.data;
+            const blob = new Blob([arrayBuffer], { type: 'image/png' });
+            const imageUrl = URL.createObjectURL(blob);
 
             // Display the image directly
             const img = document.createElement('img');
-            img.src = 'data:image/png;base64,' + imageBase64;
+            img.src = imageUrl;
 
             const screenContainer = document.getElementById('screen-container');
             screenContainer.innerHTML = '';
